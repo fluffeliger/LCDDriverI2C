@@ -2,9 +2,11 @@
 A driver for any LCD Module using I²C-Communication.
 
 ## Installation
-For installation put `lcdi2c.cpp` and `lcdi2c.hpp` in your project. You are also required to put the `i2c.hpp` and `i2c.cpp` in your project. All files are in the /include folder.
+For installation put `lcdi2c.cpp` and `lcdi2c.hpp` in your project. You are also required to put the `i2c.hpp` and `i2c.cpp` in your project. All header files are in the `/include` folder and all source files are in the `/src` folder. In an AVR Project they go all in the same root folder.
 
 ## Usage
+**NOTE:** If you forget something, in the header files are also small documentation hints
+
 ### First Steps
 First you need to create an LCD Object. Example here:
 ```cpp
@@ -61,7 +63,7 @@ As the comments say, Backlight, Display Content Visibility, Cursor Visibility an
 ### Custom Characters
 There is also a possiblity to create custom characters. The characters are mapped from the top to the bottom in a `uint8_t` array. Each bit is a pixel at screen. If you have a 5x8 character screen, the first 5 bits and 8 of them are processed. If it is a 5x10 character screen, the first 5 bits and 10 of them are processed.
 
-You can create an example character like that:
+You can create an example character like that or using a cool website for creation [here](https://omerk.github.io/lcdchargen/):
 ```cpp
 const uint8_t smileyFace[] = {
     0b00000,
