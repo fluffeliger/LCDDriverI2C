@@ -43,6 +43,17 @@ You can clear the screen with the following method:
 lcd.clear();
 ```
 
+### Cursor
+You can not only adjust the Cursor, you can also move it!
+```cpp
+// Going Home
+lcd.home();
+
+// Go to X = 1, Y = 2
+lcd.move(1, 2);
+```
+Comments are pretty self explaining.
+
 ### Adjusting Display
 You can adjust the display in a few ways:
 ```cpp
