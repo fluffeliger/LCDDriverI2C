@@ -86,11 +86,6 @@
 // Set DD RAM Address --------- 0b1xxxxxxx  (Display Data RAM)
 #define LCD_SET_DDADR           0x80
 
-#define LCD_DDADR_LINE1         0x00
-#define LCD_DDADR_LINE2         0x40
-#define LCD_DDADR_LINE3         0x10
-#define LCD_DDADR_LINE4         0x50
-
 class LCDI2C {
 public:
 	LCDI2C(int address, int width, int height, bool backlight);
@@ -130,6 +125,7 @@ private:
 	void soft_reset();
 	void update_display_mode();
 	void send_data(uint8_t byte);
+	int get_current_address_position();
 
 	int _address;
 	int _width;

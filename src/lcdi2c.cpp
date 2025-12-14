@@ -78,32 +78,9 @@ void LCDI2C::home() {
 }
 
 void LCDI2C::move(uint8_t x, uint8_t y) {
-	uint8_t data;
-	
-	switch (y) {
-		case 0:
-		data = LCD_SET_DDADR + LCD_DDADR_LINE1 + x;
-		break;
-		
-		case 1:
-		data = LCD_SET_DDADR + LCD_DDADR_LINE2 + x;
-		break;
-		
-		case 2:
-		data = LCD_SET_DDADR + LCD_DDADR_LINE3 + x;
-		break;
-		
-		case 3:
-		data = LCD_SET_DDADR + LCD_DDADR_LINE4 + x;
-		break;
-		
-		default:
-		return;
-	}
-	
 	_cursor_x = x;
 	_cursor_y = y;
-	send_command(data);
+	send_command(LCD_SET_DDADR + get_current_address_position());
 }
 
 void LCDI2C::send_nibble(uint8_t nibble, bool rs) {
@@ -154,4 +131,12 @@ void LCDI2C::generateChar(uint8_t address, const uint8_t *data) {
 	send_command(LCD_SET_CGADR | (address << 3));
 	for (uint8_t i = 0; i < (_detailedFont ? 10 : 8); i++) send_data(data[i]);
 	send_command(LCD_SET_DDADR);
+}
+
+int LCDI2C::get_current_address_position() {
+	if (_cursor_y == 0) return _cursor_x;
+	if (_cursor_y == 1) return 0x40 + _cursor_x;
+	if (_cursor_y == 2) return _width + _cursor_x;
+	if (_cursor_y == 3) return 0x40 + _width + _cursor_x;
+	return 0;
 }

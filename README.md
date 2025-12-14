@@ -1,5 +1,5 @@
 # LCDDriverI2C
-A driver for any LCD Module using I²C-Communication.
+A driver for any LCD Module using I²C-Communication. **Not using Arduino IDE.**
 
 ## Installation
 For installation put `lcdi2c.cpp` and `lcdi2c.hpp` in your project. You are also required to put the `i2c.hpp` and `i2c.cpp` in your project. All header files are in the `/include` folder and all source files are in the `/src` folder. In an AVR Project they go all in the same root folder.

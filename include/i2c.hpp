@@ -10,12 +10,12 @@
 #include <util/twi.h>
 #include <util/delay.h>
 
-// Pin definitions for ATtiny85
+// Pin definitions for ATmega325
 #define DDR_USI             DDRC
 #define PORT_USI            PORTC
 #define PIN_USI             PINC
-#define PORT_USI_SDA        PC4
-#define PORT_USI_SCL        PC5
+#define PORT_USI_SDA        PORTC4		// Pin 27
+#define PORT_USI_SCL        PORTC5		// Pin 28
 #define PIN_USI_SDA         PINC4
 #define PIN_USI_SCL         PINC5
 
@@ -28,7 +28,7 @@
 #define TWI_MR_DATA_ACK     0x50
 #define TWI_MR_DATA_NACK    0x58
 
-#define SCL_CLOCK 100000L
+#define SCL_CLOCK 1000000L
 
 void twi_master_init(void);
 
