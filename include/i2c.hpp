@@ -7,56 +7,49 @@
 #pragma once
 
 #include <avr/io.h>
-#include <util/twi.h>
 #include <util/delay.h>
+#include <stdint.h>
 
-// Pin definitions for ATmega325
-#define DDR_USI             DDRC
-#define PORT_USI            PORTC
-#define PIN_USI             PINC
-#define PORT_USI_SDA        PORTC4		// Pin 27
-#define PORT_USI_SCL        PORTC5		// Pin 28
-#define PIN_USI_SDA         PINC4
-#define PIN_USI_SCL         PINC5
+// USI
+#ifdef USISR
 
-// TWI Status codes
-#define TWI_START           0x08
-#define TWI_REP_START       0x10
-#define TWI_MT_SLA_ACK      0x18
-#define TWI_MT_DATA_ACK     0x28
-#define TWI_MR_SLA_ACK      0x40
-#define TWI_MR_DATA_ACK     0x50
-#define TWI_MR_DATA_NACK    0x58
+	#define I2C_MODE_USI
 
-#define SCL_CLOCK 1000000L
+	#define USI_PORT_MASK ((1 << PORT_USI_SDA) | (1 << PORT_USI_SCL))
+	#define I2C_DELAY_US 1 // Clock delay (us) for ~1MHz at 8MHz
+	
+	// Pin definitions for ATtiny85
+	#define I2C_USI_DDR				DDRB
+	#define I2C_USI_PORT			PORTB
+	#define I2C_USI_PIN				PINB
+	#define I2C_USI_PORT_SDA		PORTB0     // Pin 5
+	#define I2C_USI_PORT_SCL	PORTB2     // Pin 7
 
-void twi_master_init(void);
+#endif
 
-// Send START condition
-// Returns 0 if bus busy or error
-uint8_t twi_start(void);
+// TWI
+#ifdef TWSR
 
-// Send STOP condition
-void twi_stop(void);
+	#define I2C_MODE_TWI
 
-// Write a byte to the bus
-// Returns 0 on success (ACK received), 1 on NACK
-uint8_t twi_write_byte(uint8_t data);
+	#define TWI_START           0x08
+	#define TWI_REP_START       0x10
+	#define TWI_MT_SLA_ACK      0x18
+	#define TWI_MT_DATA_ACK     0x28
+	#define TWI_MR_SLA_ACK      0x40
+	#define TWI_MR_DATA_ACK     0x50
+	#define TWI_MR_DATA_NACK    0x58
+	#define SCL_CLOCK 1000000L
 
-// Read a byte from the bus
-// ack = 0: send NACK after byte (last byte), ack = 1: send ACK
-uint8_t twi_read_byte(uint8_t ack);
+#endif
 
-// Write multiple bytes to a slave
-// addr: 7-bit slave address
-// data: pointer to buffer
-// len: number of bytes
-// Returns 0 on success, 1 on failure
-uint8_t twi_write(uint8_t addr, uint8_t *data, uint8_t len);
+void i2c_init(void);
 
-// Read multiple bytes from a slave
-// addr: 7-bit slave address
-// data: pointer to buffer
-// len: number of bytes
-// Returns 0 on success, 1 on failure
-uint8_t twi_read(uint8_t addr, uint8_t *data, uint8_t len);
+bool i2c_start(void);
+void i2c_stop(void);
+
+bool i2c_write_byte(uint8_t data);
+uint8_t i2c_read_byte(uint8_t ack);
+
+bool i2c_write(uint8_t addr, uint8_t *data, uint8_t len);
+bool i2c_read(uint8_t addr, uint8_t *data, uint8_t len);

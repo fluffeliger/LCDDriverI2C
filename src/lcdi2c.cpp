@@ -16,7 +16,7 @@ void LCDI2C::init(bool multiLine, bool detailedFont, bool displayState, bool cur
 	_cursorBlink = cursorBlink;
 	_detailedFont =  detailedFont;
 	
-	twi_master_init();
+	i2c_init();
 	soft_reset();
 	
 	send_command(LCD_SET_FUNCTION
@@ -36,7 +36,7 @@ void LCDI2C::init(bool multiLine, bool detailedFont, bool displayState, bool cur
 
 void LCDI2C::setBacklight(bool state) {
 	_backlight = state ? BACKLIGHT : 0x00;
-	twi_write(_address, &_backlight, 1);
+	i2c_write(_address, &_backlight, 1);
 }
 
 void LCDI2C::setDisplayState(bool state) {
@@ -70,6 +70,17 @@ void LCDI2C::write(const char* text) {
 	}
 }
 
+void LCDI2C::write(const char* text, int length) {
+	for (int i = 0; i < length; i++) {
+		if (_cursor_x >= _width) {
+			if (_cursor_y >= (_height - 1)) home();
+			else move(0, _cursor_y + 1);
+		}
+		send_data(*text++);
+		_cursor_x ++;
+	}
+}
+
 void LCDI2C::home() {
 	send_command(LCD_CURSOR_HOME);
 	_delay_ms(LCD_CURSOR_HOME_MS);
@@ -89,9 +100,9 @@ void LCDI2C::send_nibble(uint8_t nibble, bool rs) {
 	data[0] = nibble | EN_BIT | (rs ? RS_BIT : 0x00) | _backlight;
 	data[1] = nibble | _backlight;
 	
-	twi_write(_address, data, 1);
+	i2c_write(_address, data, 1);
 	_delay_us(LCD_ENABLE_US);
-	twi_write(_address, &data[1], 1);
+	i2c_write(_address, &data[1], 1);
 }
 
 void LCDI2C::send_command(uint8_t cmd, bool rs) {

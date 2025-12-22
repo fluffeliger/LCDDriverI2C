@@ -111,6 +111,9 @@ public:
 	// Write text to Screen
 	void write(const char* text);
 	
+	// Write text to Screen with length
+	void write(const char* text, int length);
+	
 	// Bring cursor home
 	void home();
 	
