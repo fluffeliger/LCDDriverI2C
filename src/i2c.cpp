@@ -44,7 +44,7 @@ bool i2c_start(void) {
 		while (!(TWCR & (1 << TWINT)));
 
 		uint8_t status = TWSR & 0xF8;
-		if ((status != TW_START) && (status != TW_REP_START)) return false;
+		if ((status != TWI_START) && (status != TWI_REP_START)) return false;
 		return true;
 	#endif
 }
@@ -87,7 +87,7 @@ bool i2c_write_byte(uint8_t data) {
 		while (!(TWCR & (1 << TWINT)));
 
 		uint8_t status = TWSR & 0xF8;
-		if ((status != TW_MT_SLA_ACK) && (status != TW_MT_DATA_ACK) && (status != TW_MR_DATA_ACK))
+		if ((status != TWI_MT_SLA_ACK) && (status != TWI_MT_DATA_ACK) && (status != TWI_MR_DATA_ACK))
 			return true;
 		return false;
 	#endif
